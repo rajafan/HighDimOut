@@ -1,0 +1,68 @@
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Using Outlier Detection Algorithms to Analyze NBA Players}
+-->
+
+---
+title: "Using Outlier Detection Algorithms to Analyze NBA Players"
+author: "Cheng Fan"
+date: "April 1, 2015"
+output: html_document
+---
+
+#Section 1: Overview
+
+This is a short tutorial on using outlier detection algorithms to analyze NBA players. The data to be used is called GoldenStatesWarriors, which has been included in the package. The data contains the statistics of all players in the Golden States Warriors during the 2013-2014 season. In total, 18 players are included. The data contains 27 variables, which specifies the following attributes, player names (Name), age (Age), games played (G), games started (GS), minutes played (MP), field goal made (FG), field goal attemps (FGA), field goal percentage (FGP), 3-pointers made (3P), 3-pointer attemps (3PA), 3-pointer percentage (3PP), 2-pointers made (2P), 2-pointer attemps (2PA), 2-pointer percentages (2PP), effective field goal percentage (eFGP), free throws made (FT), free throw attemps (FTA), free throw percentage (FTP), offensive rebounds (ORB), defensive rebounds (DRB), total rebounds (TRB), assists (AST), steals (STL), blocks (BLK), turnovers (TOV), personal fouls (PF), and total points (PTS).  
+
+The summary of the data are shown as below:
+
+```{r_1, echo=FALSE}
+library(HighDimOut)
+data(GoldenStatesWarriors)
+summary(GoldenStatesWarriors)
+```
+
+#Section 2: Data preprocessing
+
+It is obvious that the variables in the data have different scales. Prior to the implementation of outlier detection algorithms, it is important to normalize the raw data. A Z-normalization is used for data preprocessing (except for the first column, which is the player name). One thing to note is that the raw data contains NAs. This is because for certain players, they did not make any attemps on 3-pointers and therefore, the resulting 3-pointer percentage is NA. Once the data is scaled, these missing values are filled as 0. 
+
+```{r_2}
+library(plyr)
+data.scale <- t(aaply(.data = as.matrix(GoldenStatesWarriors[,-1]), .margins = 2, .fun = function(x) (x-mean(x, na.rm = T))/sd(x, na.rm = T)))
+summary(data.scale)
+
+data.scale[is.na(data.scale)] <- 0
+
+```
+
+#Section 3: Use of outlier detection algorithms
+
+The basic version of ABOD use all the other observations in the data to evaluate the outlierness of a certain observation. As a result, the computation can be very time-consuming. The approximated version of ABOD use a subset to evaluate the outlierness. Even though the speed performance can be improved, the results sometimes may not be that reliable. For this data set, the size is rather small. The basic version of ABOD is used for outlier detection. The raw scores of ABOD are transformed into probabilities using the outlier unification scheme, which is proposed by Kriegel, Kroger, Schubert, and Zimek in 2011. 
+
+```{r_3, warning=FALSE}
+score.ABOD <- Func.ABOD(data = data.scale, basic = T)
+score.trans.ABOD <- Func.trans(raw.score = score.ABOD, method = "ABOD")
+```
+
+The top 5 identified outliers are Stephen Curry, Dewayne Dedmon, Andrew Bogut, David Lee, and Klay Thompson. Except for Dewayne Dedmon, all the other 4 players are the starting lineups for Golden States Warriors during that season. Stephen Curry and Klay Thompson are selected as outliers due to their excellent scoring abilities and shooting skills. In addition, Curry has the highest assists rank in the team. Andrew Bogut is a defensive anchor, who contributes a lot to the rebounds and blocks. David Lee shows his importance on both end of the floors. He can scores, as well as rebounding. The other oultier is Dewayne Dedmon. This is reasonable as he only played 4 games for Warriors and his performance was not very impressive.
+
+```{r_4}
+GoldenStatesWarriors$Name[order(score.trans.ABOD, decreasing = T)[1:5]]
+GoldenStatesWarriors[order(score.trans.ABOD, decreasing = T)[1:5],]
+```
+
+Next, the SOD algorithm is used. Considering the data size, 5 will be reasonable to construct the reference set. k.nn is set as 10. Note that k.nn should be larger than k.sel. alpha is set as default, i.e., 0.8. This default is recommended by the authors of this algorithm.   
+
+The top 5 outliers revealed are quite similar to those identified by ABOD. The only difference is that instead of picking the bench player, the SOD algorithm chooses another important player in the Warrior team, Draymond Green. Even though Green was not very often chosen as the starting lineup, he has played even more minutes than the starting Bogut. His role is the 6th man in the team. During the 2013-2014 team, Green really came out strong. As a small forward, he contributed a lot to the defensive side, such as rebounding and blocking. In addition, he could also contribute to the offensive side. So to me, it is very reasonable to select Green as one of the outliers in the Warrior team.
+
+```{r_5}
+score.SOD <- Func.SOD(data = data.scale, k.nn = 10, k.sel = 5, alpha = .8)
+score.trans.SOD <- Func.trans(raw.score = score.SOD, method = "SOD")
+
+GoldenStatesWarriors$Name[order(score.trans.SOD, decreasing = T)[1:5]]
+GoldenStatesWarriors[order(score.trans.SOD, decreasing = T)[1:5],]
+```
+
+
+
+

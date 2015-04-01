@@ -242,3 +242,17 @@ Func.trans <- function(raw.score, method) {
 #' ggplot(data = TestData, aes(x = x, y = y, shape=Lab, color=Lab)) + geom_point()
 
 "TestData"
+
+#' The player statistics of the Golden States Warriors in the season 2013-2014
+#' 
+#' The data contains the statistics of the players in one NBA team, i.e., Golden States Warriors, during the season 2013-2014.
+#' The data has 18 rows since there were 18 players shown in the lineups for the Golden States Warriors during that season.
+#' The data has 27 columns, including the player names, age, games played, games started, minutes played, field goal made, field goal attemps, field goal percentage, 3-pointers made, 3-pointer attemps, 3-pointer percentage, 2-pointers made, 2-pointer attemps, 2-pointer percentages, effective field goal percentage, free throws made, free throw attemps, free throw percentage, offensive rebounds, defensive rebounds, total rebounds, assists, steals, blocks, turnovers, personal fouls, and total points.  
+#'  
+#' @docType data
+#' 
+#' @usage data(TestData)
+#' 
+#' @format A data frame with 18 rows and 27 variables:
+
+"GoldenStatesWarriors"
