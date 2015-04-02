@@ -4,17 +4,16 @@
 \name{TestData}
 \alias{TestData}
 \title{Testing data for testing the performance of different algorithms}
-\format{A data frame with 155 rows and 3 variables:}
+\format{A data frame with 60 rows and 3 variables:}
 \usage{
 data(TestData)
 }
 \description{
-The data has 155 rows and 3 variables.
-The first two variables are the x and y coordinates.
+The data are generated according to the example in the paper "Kriegel, Kroger, Schubert, and Arthur Zimek, 2009, Outlier Detection in Axis-Parallel Subspaces of High Dimensional Data".
+The data has 60 rows and 3 variables. The first two variables are the x and y coordinates.
 The third variable indicates the type of data, i.e., "Pattern_1", "Pattern_2", or "Outlier".
-The first 80 observations belong to "Pattern_1". For these observations, x coordinates are from a uniform distribution between 0.69 to 0.71, and y coordiantes are randomly picked from a uniform distribution (min=0.4, max=1).
-Another 50 observations belong to "Pattern_2", whose y coordinates are from a uniform distribution between 0.09 to 0.11, and x coordinates are randomly picked from a uniform distribution (min=0, max=0.6).
-The other 25 observations are "Outliers". Their x and y coordinates are generated from a unifrom distribution (min=0, max=1).
+The first 25 observations belong to "Pattern_1". Another 25 observations represent "Pattern_2".
+The other 10 observations are "Outliers".
 }
 \examples{
 library(ggplot2)

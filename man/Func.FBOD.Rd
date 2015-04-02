@@ -26,10 +26,10 @@ The final score of FBOD is the cumulative sum of each iteration.
 }
 \examples{
 library(ggplot2)
-res.FBOD <- Func.FBOD(data = TestData[,1:2], iter=100, k.nn=25)
+res.FBOD <- Func.FBOD(data = TestData[,1:2], iter=10, k.nn=5)
 data.temp <- TestData[,1:2]
 data.temp$Ind <- NA
-data.temp[order(res.FBOD, decreasing = TRUE)[1:25],"Ind"] <- "Outlier"
+data.temp[order(res.FBOD, decreasing = TRUE)[1:10],"Ind"] <- "Outlier"
 data.temp[is.na(data.temp$Ind),"Ind"] <- "Inlier"
 data.temp$Ind <- factor(data.temp$Ind)
 ggplot(data = data.temp) + geom_point(aes(x = x, y = y, color=Ind, shape=Ind))

@@ -25,10 +25,10 @@ This function is based on the work of Krigel, H.P., Schubert, M., Zimek, A., Ang
 }
 \examples{
 library(ggplot2)
-res.ABOD <- Func.ABOD(data=TestData[,1:2], basic=FALSE, perc=0.05)
+res.ABOD <- Func.ABOD(data=TestData[,1:2], basic=FALSE, perc=0.2)
 data.temp <- TestData[,1:2]
 data.temp$Ind <- NA
-data.temp[order(res.ABOD, decreasing = FALSE)[1:25],"Ind"] <- "Outlier"
+data.temp[order(res.ABOD, decreasing = FALSE)[1:10],"Ind"] <- "Outlier"
 data.temp[is.na(data.temp$Ind),"Ind"] <- "Inlier"
 data.temp$Ind <- factor(data.temp$Ind)
 ggplot(data = data.temp) + geom_point(aes(x = x, y = y, color=Ind, shape=Ind))

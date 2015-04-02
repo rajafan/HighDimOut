@@ -10,6 +10,7 @@ data(TestData)
 }
 \description{
 The data contains the statistics of the players in one NBA team, i.e., Golden States Warriors, during the season 2013-2014.
+It can be obtained from the following website: http://www.basketball-reference.com.
 The data has 18 rows since there were 18 players shown in the lineups for the Golden States Warriors during that season.
 The data has 27 columns, including the player names, age, games played, games started, minutes played, field goal made, field goal attemps, field goal percentage, 3-pointers made, 3-pointer attemps, 3-pointer percentage, 2-pointers made, 2-pointer attemps, 2-pointer percentages, effective field goal percentage, free throws made, free throw attemps, free throw percentage, offensive rebounds, defensive rebounds, total rebounds, assists, steals, blocks, turnovers, personal fouls, and total points.
 }

@@ -53,10 +53,10 @@ Func.SNN <- function(data, k.nn, k.sel) {
 #' 
 #' @examples
 #' library(ggplot2)
-#' res.ABOD <- Func.ABOD(data=TestData[,1:2], basic=FALSE, perc=0.05)
+#' res.ABOD <- Func.ABOD(data=TestData[,1:2], basic=FALSE, perc=0.2)
 #' data.temp <- TestData[,1:2]
 #' data.temp$Ind <- NA
-#' data.temp[order(res.ABOD, decreasing = FALSE)[1:25],"Ind"] <- "Outlier"
+#' data.temp[order(res.ABOD, decreasing = FALSE)[1:10],"Ind"] <- "Outlier"
 #' data.temp[is.na(data.temp$Ind),"Ind"] <- "Inlier"
 #' data.temp$Ind <- factor(data.temp$Ind)
 #' ggplot(data = data.temp) + geom_point(aes(x = x, y = y, color=Ind, shape=Ind))
@@ -114,10 +114,10 @@ Func.ABOD <- function(data, basic=FALSE, perc) {
 #' 
 #' @examples
 #' library(ggplot2)
-#' res.SOD <- Func.SOD(data = TestData[,1:2], k.nn = 10, k.sel = 5)
+#' res.SOD <- Func.SOD(data = TestData[,1:2], k.nn = 10, k.sel = 5, alpha = 0.8)
 #' data.temp <- TestData[,1:2]
 #' data.temp$Ind <- NA
-#' data.temp[order(res.SOD, decreasing = TRUE)[1:25],"Ind"] <- "Outlier"
+#' data.temp[order(res.SOD, decreasing = TRUE)[1:10],"Ind"] <- "Outlier"
 #' data.temp[is.na(data.temp$Ind),"Ind"] <- "Inlier"
 #' data.temp$Ind <- factor(data.temp$Ind)
 #' ggplot(data = data.temp) + geom_point(aes(x = x, y = y, color=Ind, shape=Ind))
@@ -164,10 +164,10 @@ Func.SOD <- function(data, k.nn, k.sel, alpha=0.8) {
 #' 
 #' @examples
 #' library(ggplot2)
-#' res.FBOD <- Func.FBOD(data = TestData[,1:2], iter=100, k.nn=25)
+#' res.FBOD <- Func.FBOD(data = TestData[,1:2], iter=10, k.nn=5)
 #' data.temp <- TestData[,1:2]
 #' data.temp$Ind <- NA
-#' data.temp[order(res.FBOD, decreasing = TRUE)[1:25],"Ind"] <- "Outlier"
+#' data.temp[order(res.FBOD, decreasing = TRUE)[1:10],"Ind"] <- "Outlier"
 #' data.temp[is.na(data.temp$Ind),"Ind"] <- "Inlier"
 #' data.temp$Ind <- factor(data.temp$Ind)
 #' ggplot(data = data.temp) + geom_point(aes(x = x, y = y, color=Ind, shape=Ind))
@@ -214,8 +214,8 @@ Func.trans <- function(raw.score, method) {
     
     #Normalization
     erf <- function(x) 2*pnorm(x*sqrt(2))-1
-    if (sd(score.reg)==0) {score.norm <- rep(0, length(raw.score))} else {
-        score.norm <- erf(x=(score.reg-mean(score.reg))/(sqrt(x=2)*sd(score.reg)))
+    if (sd(score.reg, na.rm = T)==0) {score.norm <- rep(0, length(raw.score))} else {
+        score.norm <- erf(x=(score.reg-mean(score.reg, na.rm = T))/(sqrt(x=2)*sd(score.reg, na.rm = T)))
         score.norm[which(score.norm<0)] <- 0   
     }
     return(score.norm)
@@ -223,18 +223,17 @@ Func.trans <- function(raw.score, method) {
 
 #' Testing data for testing the performance of different algorithms
 #' 
-#' The data has 155 rows and 3 variables. 
-#' The first two variables are the x and y coordinates.
+#' The data are generated according to the example in the paper "Kriegel, Kroger, Schubert, and Arthur Zimek, 2009, Outlier Detection in Axis-Parallel Subspaces of High Dimensional Data".
+#' The data has 60 rows and 3 variables. The first two variables are the x and y coordinates.
 #' The third variable indicates the type of data, i.e., "Pattern_1", "Pattern_2", or "Outlier".
-#' The first 80 observations belong to "Pattern_1". For these observations, x coordinates are from a uniform distribution between 0.69 to 0.71, and y coordiantes are randomly picked from a uniform distribution (min=0.4, max=1).
-#' Another 50 observations belong to "Pattern_2", whose y coordinates are from a uniform distribution between 0.09 to 0.11, and x coordinates are randomly picked from a uniform distribution (min=0, max=0.6).
-#' The other 25 observations are "Outliers". Their x and y coordinates are generated from a unifrom distribution (min=0, max=1).
+#' The first 25 observations belong to "Pattern_1". Another 25 observations represent "Pattern_2". 
+#' The other 10 observations are "Outliers". 
 #'  
 #' @docType data
 #' 
 #' @usage data(TestData)
 #' 
-#' @format A data frame with 155 rows and 3 variables:
+#' @format A data frame with 60 rows and 3 variables:
 #' 
 #' @examples
 #' library(ggplot2)
@@ -246,6 +245,7 @@ Func.trans <- function(raw.score, method) {
 #' The player statistics of the Golden States Warriors in the season 2013-2014
 #' 
 #' The data contains the statistics of the players in one NBA team, i.e., Golden States Warriors, during the season 2013-2014.
+#' It can be obtained from the following website: http://www.basketball-reference.com.
 #' The data has 18 rows since there were 18 players shown in the lineups for the Golden States Warriors during that season.
 #' The data has 27 columns, including the player names, age, games played, games started, minutes played, field goal made, field goal attemps, field goal percentage, 3-pointers made, 3-pointer attemps, 3-pointer percentage, 2-pointers made, 2-pointer attemps, 2-pointer percentages, effective field goal percentage, free throws made, free throw attemps, free throw percentage, offensive rebounds, defensive rebounds, total rebounds, assists, steals, blocks, turnovers, personal fouls, and total points.  
 #'  

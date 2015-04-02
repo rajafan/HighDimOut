@@ -24,10 +24,10 @@ The implemented method is based on the work of Krigel, H.P., Kroger, P., Schuber
 }
 \examples{
 library(ggplot2)
-res.SOD <- Func.SOD(data = TestData[,1:2], k.nn = 10, k.sel = 5)
+res.SOD <- Func.SOD(data = TestData[,1:2], k.nn = 10, k.sel = 5, alpha = 0.8)
 data.temp <- TestData[,1:2]
 data.temp$Ind <- NA
-data.temp[order(res.SOD, decreasing = TRUE)[1:25],"Ind"] <- "Outlier"
+data.temp[order(res.SOD, decreasing = TRUE)[1:10],"Ind"] <- "Outlier"
 data.temp[is.na(data.temp$Ind),"Ind"] <- "Inlier"
 data.temp$Ind <- factor(data.temp$Ind)
 ggplot(data = data.temp) + geom_point(aes(x = x, y = y, color=Ind, shape=Ind))
